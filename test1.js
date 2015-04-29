@@ -7,7 +7,7 @@ Type.registerNamespace('nsDTColourTestList');
 	//private members
 	var overrides = {};
   	overrides.Templates = {};
-  	overrides.Templates.OnPostRender = changeCancelButtonLocation;
+  	overrides.Templates.OnPostRender = onPostRender;
 
    	overrides.Templates.Fields = {
        //Colour is the Name of our field
@@ -31,20 +31,16 @@ Type.registerNamespace('nsDTColourTestList');
 	};
 
 
-	function changeCancelButtonLocation(ctx)
+	//more testing to do here this got fired lots of time.
+	function onPostRender(ctx)
 	{
+		//Due to lifecycle, you cannot Ensure mquery load till later, so Im doing it here
+		//because doing it earlier didnt work.
+		//Force sync loading to prevent race conditions
 		EnsureScriptFunc('mQuery.js', 'm$', function() {
-		    // DO STUFF
-		    alert("I got mQuery");
-		});
-		//Just some example code I'm commenting out till I find out how to use mQuery instead
-		/*
-		jQuery(".csrHiddenField").closest("tr").hide(); 
-		$('input[value=Cancel]').click(function() {
-			//GetUrlKeyValue built in function, handy it is http://techfindings-prem.blogspot.co.uk/search/label/GetUrlKeyValue
-			window.location=GetUrlKeyValue('cancelSource');
-		});
-		*/
+		    alert("I got mQuery, now what ;-)");
+		}, false);
+		
 	}
 
 
