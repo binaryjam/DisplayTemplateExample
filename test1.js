@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 Type.registerNamespace('nsDTColourTestList');
 
@@ -7,7 +7,7 @@ Type.registerNamespace('nsDTColourTestList');
 	//private members
 	var overrides = {};
   	overrides.Templates = {};
-  	overrides.Templates.OnPostRender = onPostRender;
+  	overrides.Templates.OnPostRender = onPostRender;   //As this is associated with a template not sure why its firing lots of times.
 
    	overrides.Templates.Fields = {
        //Colour is the Name of our field
@@ -19,6 +19,7 @@ Type.registerNamespace('nsDTColourTestList');
 
     //do not user var = function for private functions, else you get bit by declaration order.
 	function colourFieldDisplay(ctx) {
+		console.log("colourFieldDisplay");
 		if (ctx !== null && ctx.CurrentItem !== null) {
 			//I don't like this but more research needed regarding a better way needs some kind of register CSS
 			var divStyle="style='display:inline-block; margin 3px;width:20px;height:20px;border:1px solid black;background-color:" 
@@ -31,45 +32,47 @@ Type.registerNamespace('nsDTColourTestList');
 	};
 
 
-	//more testing to do here this got fired lots of time.
+	//more testing to do here this got fired lots of times on a DispForm.
 	function onPostRender(ctx)
 	{
+
+		console.log("onPostRender");
 		//Due to lifecycle, you cannot Ensure mquery load till later, so Im doing it here
 		//because doing it earlier didnt work.
+		
 		//Force sync loading to prevent race conditions
 		EnsureScriptFunc('mQuery.js', 'm$', function() {
-		    alert("I got mQuery, now what ;-)");
+		    console.log("mquery callback");
 		}, false);
 		
 	}
 
 
 	function registerTemplateOverrides() {
+		console.log("registerTemplateOverrides");
 		SPClientTemplates.TemplateManager.RegisterTemplateOverrides(overrides);
 	};
 
 	function mdsRegisterTemplateOverrides() {
+		console.log("mdsRegisterTemplateOverrides");
 	    var thisUrl = _spPageContextInfo.siteServerRelativeUrl + "js/jslink/test1.js";
 	    registerField();
 	    RegisterModuleInit(thisUrl, registerTemplateOverrides);
 	};
 
 	//public Members
-    ns.RegisterTemplateOverrides = registerTemplateOverrides;
+	ns.RegisterTemplateOverrides = registerTemplateOverrides;
   	ns.MdsRegisterTemplateOverrides = mdsRegisterTemplateOverrides;
 	
-
-	if (typeof _spPageContextInfo != "undefined" && _spPageContextInfo != null) {
-		nsDTColourTestList.MdsRegisterTemplateOverrides();
-	} 
-	else {
-		nsDTColourTestList.RegisterTemplateOverrides();
-	};
 
 })(nsDTColourTestList);
 
 
-
-
-
-
+if (typeof _spPageContextInfo != "undefined" && _spPageContextInfo != null) {
+	console.log("Starting Display Override MDS");
+	nsDTColourTestList.MdsRegisterTemplateOverrides();
+} 
+else {
+	console.log("Starting Display Override noMDS");
+	nsDTColourTestList.RegisterTemplateOverrides();
+};
