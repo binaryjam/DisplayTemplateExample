@@ -1,9 +1,25 @@
+/* global nsDTColourTestList */
+/// <reference path="typings/sharepoint/sharepoint.d.ts"/>
+/// <reference path="typings/microsoft-ajax/microsoft.ajax.d.ts"/>
+
 'use strict';
+//Author:Simon
+//Help from Hugh Wood
+//Reference Blogs
+//	 Martin Hatch - http://www.martinhatch.com/2013/08/jslink-and-display-templates-part-1.html
+//   Wictor Wilen - http://www.wictorwilen.se/the-correct-way-to-execute-javascript-functions-in-sharepoint-2013-mds-enabled-sites
+//So what is this ?
+//   I'm trying to create an Display Template that uses the best practices I can pull together and hopefully
+//	 by using JS Patterns produce something that works efficiently and elegantly
+//   No ugly code.
+//   It's now also a test bed for using VS code and Git with Intellisense by incorporating Definately Typed objects.
+//
+//   Early days so don't expect elegant or efficient yet :-)
+//
 
 Type.registerNamespace('nsDTColourTestList');
 
 (function(ns) {
-
 	//private members
 	var overrides = {};
   	overrides.Templates = {};
@@ -56,14 +72,11 @@ Type.registerNamespace('nsDTColourTestList');
 	function mdsRegisterTemplateOverrides() {
 		console.log("mdsRegisterTemplateOverrides");
 	    var thisUrl = _spPageContextInfo.siteServerRelativeUrl + "js/jslink/test1.js";
-	    registerField();
 	    RegisterModuleInit(thisUrl, registerTemplateOverrides);
 	};
-
-	//public Members
+	
 	ns.RegisterTemplateOverrides = registerTemplateOverrides;
   	ns.MdsRegisterTemplateOverrides = mdsRegisterTemplateOverrides;
-	
 
 })(nsDTColourTestList);
 
