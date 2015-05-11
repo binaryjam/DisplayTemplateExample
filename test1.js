@@ -1,23 +1,14 @@
-/* global EnsureScriptFunc */    //No Types for init.js, shame really.  Have to put this here as Type.registerNamespace doesnt return anything for intellisense to pick up on
-/* global nsDTColourTestList */  //Intellisense doesnt work for revealing module pattern, rather annoying
-/// <reference path="typings/sharepoint/sharepoint.d.ts"/>
-/// <reference path="typings/microsoft-ajax/microsoft.ajax.d.ts"/>
+/* global nsDTColourTestList */
+/// <reference path="DefinitelyTyped/microsoft-ajax/microsoft.ajax.d.ts" />
+/// <reference path="DefinitelyTyped/sharepoint/sharepoint.d.ts" />
+"use strict";
 
-'use strict';
-//Author:Simon
-//Help from Hugh Wood
-//Reference Blogs
-//	 Martin Hatch - http://www.martinhatch.com/2013/08/jslink-and-display-templates-part-1.html
-//   Wictor Wilen - http://www.wictorwilen.se/the-correct-way-to-execute-javascript-functions-in-sharepoint-2013-mds-enabled-sites
-//   Hugh Wood - http://www.spcaf.com/blog/sharepoint-javascript-context-development-part-4-the-way-of-the-async-delta-manager/
-//So what is this ?
-//   I'm trying to create an Display Template that uses the best practices I can pull together and hopefully
-//	 by using JS Patterns produce something that works efficiently and elegantly
-//   No ugly code.
-//   It's now also a test bed for using VS code and Git with Intellisense by incorporating Definately Typed objects.
-//
-//   Early days so don't expect elegant or efficient yet :-)
-//
+// jQuery library is required in this sample
+// Fallback to loading jQuery from a CDN path if the local is unavailable
+
+//Actually it's not but its handy to have here as a reference for the next one
+//(window.jQuery || document.write('<script src="//ajax.aspnetcdn.com/ajax/jquery/jquery-1.10.0.min.js"><\/script>'));
+
 
 //Creates the namespace and registers it so MDS knows its there, 
 Type.registerNamespace('nsDTColourTestList');
@@ -26,18 +17,16 @@ Type.registerNamespace('nsDTColourTestList');
 	//private members
 	var overrides = {};
   	overrides.Templates = {};
-  	overrides.Templates.OnPostRender = onPostRender;   //As this is associated with a template not sure why its firing lots of times on DisplayForm.aspx.
-														// but not for AllItems.aspx
+  
    	overrides.Templates.Fields = {
        //Colour is the Name of our field
        'Colour': {
-          'View': colourFieldDisplay,
-          'DisplayForm': colourFieldDisplay,
+          'View': colourFieldItemRender,
+          'DisplayForm': colourFieldItemRender,
         }
     };
 
-    //do not user var = function for private functions, else you get bit by declaration order.
-	function colourFieldDisplay(ctx) {
+	function colourFieldItemRender(ctx) {
 		console.log("colourFieldDisplay");
 		if (ctx !== null && ctx.CurrentItem !== null) {
 			//I don't like this but more research needed regarding a better way needs some kind of register CSS
@@ -49,24 +38,7 @@ Type.registerNamespace('nsDTColourTestList');
 			return html;
 		}
 	};
-
-
-	//more testing to do here this got fired lots of times on a DispForm.
-	function onPostRender(ctx)
-	{
-
-		console.log("onPostRender");
-		//Due to lifecycle, you cannot Ensure mquery load till later, so Im doing it here
-		//because doing it earlier didnt work.
-		
-		//Force sync loading to prevent race conditions, I suppose it depends what you do here.
-		EnsureScriptFunc('mQuery.js', 'm$', function() {
-		    console.log("mquery callback");
-		}, false);
-		
-	}
-
-
+	
 	function registerTemplateOverrides() {
 		console.log("registerTemplateOverrides");
 		SPClientTemplates.TemplateManager.RegisterTemplateOverrides(overrides);
@@ -83,10 +55,6 @@ Type.registerNamespace('nsDTColourTestList');
 
 })(nsDTColourTestList);
 
-//I thought this odd, but it must be that, if you are in the context of MDS then this object 
-//exists, if it doesnt exist then your are in a normal page, but this object exists in normal pages too
-//yes but not at this point in the lifecycle.
-//What a really strange way of determining in MDS mode or not.
 if (typeof _spPageContextInfo != "undefined" && _spPageContextInfo != null) {
 	console.log("Starting Display Override MDS");
 	nsDTColourTestList.MdsRegisterTemplateOverrides();
