@@ -1,19 +1,19 @@
 /// <reference path="DefinitelyTyped/microsoft-ajax/microsoft.ajax.d.ts" />
 /// <reference path="DefinitelyTyped/sharepoint/sharepoint.d.ts" />
 /// <reference path="DefinitelyTyped/DisplayTemplateFieldColour.d.ts" />
-"use strict";
+
 //This is a work in progress, trying to come up with a kind of best practice, of best practices
 //because the office pnp examples do not do things how other JS peeps might.
 
 
-//Im not convinced about this either, this should be SOD'ed  / Leaving in for future reference
+//Im not convinced about this either, this should be SOD'ed  and what about MDS again / Leaving in for future reference
 //(jQuery || document.write('<script src="//ajax.aspnetcdn.com/ajax/jquery/jquery-1.10.0.min.js"><\/script>'));
 
 //Creates the namespace and registers it so MDS knows its there, 
 Type.registerNamespace('BinaryJam.JSLink');
 
 (function(ns) {
-	
+	"use strict";
 	ns.DisplayTemplateFieldColour = function () {
 		
 		//private members
