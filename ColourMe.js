@@ -6,7 +6,6 @@
 /* global BinaryJam */
 /* global SPClientTemplates */
 /* global CTOverrides */
-/* global ExecuteOrDelayUntilScriptLoaded */
 // ES5 Compliant code.
 // Author Simon Tocker
 // Description my version of a complete MDS compliant JSLink file.
@@ -20,7 +19,10 @@ Type.registerNamespace('BinaryJam.JSLink.ColourMe');
 Type.registerNamespace('CTOverrides');
 
 //Routine to handle mutiple jslinks views on a page
+/* jshint ignore:start */
 window.CTOverrides=window.CTOverrides||function(){var e=this;return e.uniqueIds=1e3,ExecuteOrDelayUntilScriptLoaded(function(){e.oldRenderListView=RenderListView,RenderListView=function(i,t){"undefined"!=typeof e["ctlist_"+i.ListTitle]&&(i.BaseViewID=e["ctlist_"+i.ListTitle]),e.oldRenderListView(i,t)}},"ClientTemplates.js"),e.AddNewView=function(i){return e["ctlist_"+i]=e.uniqueIds,e.uniqueIds+=1,e.uniqueIds-1},e}();
+// Code here will be ignored by JSHint.
+/* jshint ignore:end */
 
 (function (ns) {
   //Goes inside the module not at the top.

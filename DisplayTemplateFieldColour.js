@@ -1,6 +1,11 @@
 /// <reference path="DefinitelyTyped/microsoft-ajax/microsoft.ajax.d.ts" />
 /// <reference path="DefinitelyTyped/sharepoint/sharepoint.d.ts" />
 /// <reference path="DefinitelyTyped/DisplayTemplateFieldColour.d.ts" />
+/* global Type */
+/* global RegisterModuleInit */
+/* global _spPageContextInfo */
+/* global BinaryJam */
+/* global SPClientTemplates */
 
 //This is a work in progress, trying to come up with a kind of best practice, of best practices
 //because the office pnp examples do not do things how other JS peeps might.
@@ -37,21 +42,21 @@ Type.registerNamespace('BinaryJam.JSLink');
 		function colour_FieldItemRender(ctx) {
 			if (ctx !== null && ctx.CurrentItem !== null) {
 				
-				var divStyle="style='background-color:" + ctx.CurrentItem['Colour'] + "'";
-				var html = "<div class='binaryJam_dt_FieldColour'" + divStyle + "></div> " + ctx.CurrentItem['Colour'] ;
+				var divStyle="style='background-color:" + ctx.CurrentItem.Colour + "'";
+				var html = "<div class='binaryJam_dt_FieldColour'" + divStyle + "></div> " + ctx.CurrentItem.Colour ;
 	
 				return html;
 			}
-		};
+		}
 		
 		function registerTemplateOverrides() {
 			SPClientTemplates.TemplateManager.RegisterTemplateOverrides(overrides);
-		};
+		}
 	
 		function mdsRegisterTemplateOverrides() {
 		    var thisUrl = _spPageContextInfo.siteServerRelativeUrl + "js/jslink/test1.js";
 		    RegisterModuleInit(thisUrl, registerTemplateOverrides);
-		};
+		}
 		
 		//Public interface
 		this.RegisterTemplateOverrides = registerTemplateOverrides;
@@ -60,9 +65,9 @@ Type.registerNamespace('BinaryJam.JSLink');
 
 })(BinaryJam.JSLink);
 
-if (typeof _spPageContextInfo != "undefined" && _spPageContextInfo != null) {
+if (typeof _spPageContextInfo !== "undefined" && _spPageContextInfo !== null) {
 	BinaryJam.JSLink.DisplayTemplateFieldColour.MdsRegisterTemplateOverrides();
 } 
 else {
 	BinaryJam.JSLink.DisplayTemplateFieldColour.RegisterTemplateOverrides();
-};
+}
